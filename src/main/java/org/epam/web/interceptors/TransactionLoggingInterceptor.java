@@ -17,7 +17,7 @@ public class TransactionLoggingInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        var transactionId = UUID.randomUUID().toString();
+        var transactionId = request.getHeader("TransactionId");
         MDC.put(TRANSACTION_ID, transactionId);
         request.setAttribute(TRANSACTION_ID, transactionId);
 

@@ -12,4 +12,17 @@ import java.util.Map;
 @Getter
 public class Storage {
     private final Map<String, TrainerSummary> trainerSummaryRepo;
+
+    public TrainerSummary getOrCreate(String username) {
+        return trainerSummaryRepo.computeIfAbsent(username, u -> {
+            TrainerSummary ts = new TrainerSummary();
+            ts.setTrainerUsername(u);
+            return ts;
+        });
+    }
+
+    public TrainerSummary putOrUpdate(String username, TrainerSummary trainerSummary) {
+        trainerSummaryRepo.put(username, trainerSummary);
+        return trainerSummary;
+    }
 }
