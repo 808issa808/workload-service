@@ -5,6 +5,8 @@ import org.epam.data.SummaryRepo;
 import org.epam.model.TrainerSummary;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class MongoSummaryRepository implements SummaryRepo {
@@ -12,20 +14,9 @@ public class MongoSummaryRepository implements SummaryRepo {
     private final TrainerSummaryMapper mapper;
 
     @Override
-    public TrainerSummary get(String username) {
-        var found=summaryRepository.findById(username).get();
-        return mapper.toDomain(found);
-    }
-
-    @Override
-    public TrainerSummary getOrCreate(String username) {
+    public Optional<TrainerSummary> get(String username) {
         return summaryRepository.findById(username)
-                .map(mapper::toDomain)
-                .orElseGet(() -> {
-                    TrainerSummary ts = new TrainerSummary();
-                    ts.setTrainerUsername(username);
-                    return ts;
-                });
+                .map(mapper::toDomain);
     }
 
     @Override
