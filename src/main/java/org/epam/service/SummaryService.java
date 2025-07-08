@@ -6,6 +6,8 @@ import org.epam.model.TrainerSummary;
 import org.epam.web.dto.UpdateReport;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class SummaryService {
@@ -13,12 +15,17 @@ public class SummaryService {
 
     public void update(UpdateReport updateReport) {
         var username = updateReport.getUsername();
-        TrainerSummary summary = summaryRepository.getOrCreate(username);
+        TrainerSummary summary = summaryRepository.get(username)
+                .orElseGet(() -> {
+                    TrainerSummary ts = new TrainerSummary();
+                    ts.setTrainerUsername(username);
+                    return ts;
+                });
         summary.applyReport(updateReport);
-        summaryRepository.save(username,summary);
+        summaryRepository.save(username, summary);
     }
 
-    public TrainerSummary findByUsername(String username) {
+    public Optional<TrainerSummary> findByUsername(String username) {
         return summaryRepository.get(username);
     }
 }

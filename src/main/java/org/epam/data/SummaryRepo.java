@@ -1,9 +1,9 @@
 package org.epam.data;
 
 import org.epam.model.TrainerSummary;
+import java.util.Optional;
 
 public interface SummaryRepo {
-    TrainerSummary get(String username);
-    TrainerSummary getOrCreate(String username);
+    Optional<TrainerSummary> get(String username);
     TrainerSummary save(String username, TrainerSummary trainerSummary);
 }

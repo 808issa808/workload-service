@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.epam.model.TrainerSummary;
 import org.epam.service.SummaryService;
 import org.epam.web.dto.UpdateReport;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,9 @@ public class ApiController {
     }
 
     @GetMapping("/trainer-summary/{username}")
-    public TrainerSummary getSummary(@PathVariable String username) {
-        return summaryService.findByUsername(username);
+    public ResponseEntity<TrainerSummary> getSummary(@PathVariable String username) {
+        return summaryService.findByUsername(username)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
